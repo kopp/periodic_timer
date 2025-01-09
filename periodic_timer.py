@@ -12,6 +12,7 @@ import datetime
 import re
 import sys
 import time
+import tkinter
 import tkinter.messagebox
 from typing import NamedTuple
 
@@ -117,6 +118,10 @@ def _more_time(period_duration: datetime.timedelta) -> datetime.timedelta:
 
 
 def _ask_user_to_continue(print_info: _PrintMetaInfo) -> None:
+    # disable the 'root' window of tk
+    root = tkinter.Tk()
+    root.withdraw()
+
     while (
         tkinter.messagebox.askokcancel(
             title="Timer elapsed",
@@ -128,8 +133,10 @@ def _ask_user_to_continue(print_info: _PrintMetaInfo) -> None:
         )
         is False
     ):
+        root.update()  # ensure popup is closed after button click
         period_duration = _more_time(print_info.period_duration)
         _sleep_for(period_duration, print_info.with_is_overtime())
+    root.update()  # ensure popup is closed after button click
 
 
 def main() -> None:
